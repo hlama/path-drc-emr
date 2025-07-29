@@ -43,10 +43,9 @@ services:
       - "${OPENMRS_CONFIG_CHECKSUMS_PATH:-openmrs-config-checksums}:/openmrs/data/configuration_checksums"
       - "${OPENMRS_PERSON_IMAGES_PATH:-openmrs-person-images}:/openmrs/data/person_images"
       - "${OPENMRS_COMPLEX_OBS_PATH:-openmrs-complex-obs}:/openmrs/data/complex_obs"
-      -  openmrs-activemq-data:/openmrs/data/activemq-data
     labels:
       restic-compose-backup.volumes: true
-      restic-compose-backup.volumes.include: "${OPENMRS_CONFIG_CHECKSUMS_PATH:-openmrs-config-checksums},${OPENMRS_PERSON_IMAGES_PATH:-openmrs-person-images},${OPENMRS_COMPLEX_OBS_PATH:-openmrs-complex-obs},activemq-data"
+      restic-compose-backup.volumes.include: "${OPENMRS_CONFIG_CHECKSUMS_PATH:-openmrs-config-checksums},${OPENMRS_PERSON_IMAGES_PATH:-openmrs-person-images},${OPENMRS_COMPLEX_OBS_PATH:-openmrs-complex-obs}"
 
   # MariaDB
   db:
@@ -85,10 +84,9 @@ services:
       CRON_SCHEDULE: ${CRON_SCHEDULE}
 
 volumes:
-  openmrs-data: ~
-  db-data: ~
-  restic-cache: ~
-  openmrs-config-checksums: ~
-  openmrs-person-images: ~
-  openmrs-complex-obs: ~
-  openmrs-activemq-data: ~
+  openmrs-data:
+  db-data:
+  restic-cache:
+  openmrs-config-checksums:
+  openmrs-person-images:
+  openmrs-complex-obs:

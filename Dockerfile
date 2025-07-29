@@ -6,7 +6,6 @@ WORKDIR /openmrs_distro
 
 ARG MVN_ARGS_SETTINGS="-s /usr/share/maven/ref/settings-docker.xml -U -P distro"
 ARG MVN_ARGS="install"
-RUN --mount=type=secret,id=m2settings,target=/usr/share/maven/ref/settings-docker.xml cat /usr/share/maven/ref/settings-docker.xml
 
 # Copy build files
 COPY pom.xml ./
