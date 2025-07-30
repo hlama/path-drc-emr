@@ -61,7 +61,7 @@
                                     {
                                         "id": "viralLoad",
                                         "title": "viralLoadTitle",
-                                        "encounterType": "29c02aff-9a93-46c9-bf6f-48b552fcb1fa",
+                                        "encounterType": "39da3525-afe4-45ff-8977-c53b7b359158",
                                         "concept": "856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
                                         "hasSummary": true,
                                         "summaryConcept": {
@@ -73,7 +73,7 @@
                                         "id": "lastCD4Count",
                                         "title": "lastCD4CountTitle",
                                         "hasSummary": true,
-                                        "encounterType": "29c02aff-9a93-46c9-bf6f-48b552fcb1fa",
+                                        "encounterType": "39da3525-afe4-45ff-8977-c53b7b359158",
                                         "concept": "5497AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
                                         "summaryConcept": {
                                             "type": "encounterDatetime",
