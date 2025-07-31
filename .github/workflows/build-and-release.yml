@@ -138,6 +138,11 @@ jobs:
         run: |
           mv /home/runner/docker-compose-air-gapper-*.tgz path-drc-emr-images-bundle.tgz
 
+      - name: Package docker-compose files
+        run: |
+          tar czf path-drc-docker-compose.tgz docker-compose.yml docker-compose-restore.yml .env*
+          ls -la path-drc-docker-compose.tgz
+
       - name: Upload airgap bundle artifact
         uses: actions/upload-artifact@v4
         with:
@@ -150,3 +155,4 @@ jobs:
         with:
             files: |
              path-drc-emr-images-bundle.tgz
+             path-drc-docker-compose.tgz
