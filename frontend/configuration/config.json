@@ -77,10 +77,12 @@
     "fieldConfigurations": {
       "gender": [
         {
-          "value": "male"
+          "value": "male",
+          "label": "male"
         },
         {
-          "value": "female"
+          "value": "female",
+          "label": "female"
         }
       ]
     }
