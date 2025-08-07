@@ -50,7 +50,7 @@ services:
 
   # MariaDB
   db:
-    image: mariadb:10.11
+    image: mariadb:10.11.7
     restart: "unless-stopped"
     command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci"
     healthcheck:
@@ -69,7 +69,7 @@ services:
       restic-compose-backup.mariadb: true
 
   backup:
-    image: mekomsolutions/restic-compose-backup
+    image: mekomsolutions/restic-compose-backup:latest
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ${BACKUP_PATH:-./openmrs_backup}:/restic_data
