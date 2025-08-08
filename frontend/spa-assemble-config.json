@@ -8,7 +8,7 @@
     "@openmrs/esm-dispensing-app": "next",
     "@openmrs/esm-fast-data-entry-app": "next",
     "@openmrs/esm-form-builder-app": "next",
-    "@openmrs/esm-form-engine-app": "next",
+    "@openmrs/esm-form-engine-app": "v10.2.1-pre.8389",
     "@openmrs/esm-generic-patient-widgets-app": "next",
     "@openmrs/esm-help-menu-app": "next",
     "@openmrs/esm-home-app": "next",
