@@ -65,6 +65,7 @@
                         ],
                         "Translation overrides": {
                             "en": {
+                                "clinicalVisit": "Clinical Visit",
                                 "encounterDate": "Encounter Date",
                                 "clinicalVisitEncounters": "clinical visit encounters",
                                 "visitDate": "Visit Date",
@@ -77,6 +78,7 @@
                                 "add": "Add"
                             },
                             "fr": {
+                                "clinicalVisit": "Visite clinique",
                                 "encounterDate": "Date de rencontre",
                                 "clinicalVisitEncounters": "Rencontres de visite clinique",
                                 "visitDate": "Date de visite",
