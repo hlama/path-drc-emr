@@ -86,5 +86,8 @@
         }
       ]
     }
+  },
+  "@openmrs/esm-dispensing-app": {
+    "completeOrderWithThisDispense": true
   }
 }
