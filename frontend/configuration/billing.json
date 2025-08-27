@@ -1,5 +1,5 @@
 {
-    "openmrs-esm-billing-app": {
+    "@openmrs/esm-billing-app": {
         "defaultCurrency": "CDF"
     }
 }
