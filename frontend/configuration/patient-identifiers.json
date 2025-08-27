@@ -2,7 +2,8 @@
     "@openmrs/esm-patient-registration-app": {
         "defaultPatientIdentifierTypes": [
             "05a29f94-c0ed-11e2-94be-8c13b969e334",
-            "9d6d1eec-2cd6-4637-a981-4a46b4b8b41f"
+            "9d6d1eec-2cd6-4637-a981-4a46b4b8b41f",
+            "038796d1-642f-4098-afda-22e627cc84ea"
         ]
     }
 }
