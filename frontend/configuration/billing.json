@@ -1,5 +1,10 @@
 {
     "@openmrs/esm-billing-app": {
-        "defaultCurrency": "CDF"
+        "defaultCurrency": "CDF",
+        "country": "DRC",
+        "logo": {
+            "src": "${openmrsSpaBase}/logo.png",
+            "alt": "DRC"
+        }
     }
 }
