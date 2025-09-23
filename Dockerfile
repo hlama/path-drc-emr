@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ### Dev Stage
-FROM openmrs/openmrs-core:dev-amazoncorretto-17 AS dev
+FROM openmrs/openmrs-core:2.7.x-dev-amazoncorretto-17 AS dev
 WORKDIR /openmrs_distro
 
 ARG MVN_ARGS_SETTINGS="-s /usr/share/maven/ref/settings-docker.xml -U -P distro"
@@ -25,7 +25,7 @@ RUN cp -R /openmrs_distro/distro/target/sdk-distro/web/openmrs_config /openmrs/d
 RUN mvn $MVN_ARGS_SETTINGS clean
 
 ### Run Stage
-FROM openmrs/openmrs-core:2.7.7-amazoncorretto-17
+FROM openmrs/openmrs-core:2.7.x-amazoncorretto-17
 
 # Do not copy the war if using the correct openmrs-core image version
 COPY --from=dev /openmrs/distribution/openmrs_core/openmrs.war /openmrs/distribution/openmrs_core/
