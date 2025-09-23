@@ -25,8 +25,7 @@ RUN cp -R /openmrs_distro/distro/target/sdk-distro/web/openmrs_config /openmrs/d
 RUN mvn $MVN_ARGS_SETTINGS clean
 
 ### Run Stage
-# Replace 'nightly' with the exact version of openmrs-core built for production (if available)
-FROM openmrs/openmrs-core:nightly-amazoncorretto-17
+FROM openmrs/openmrs-core:2.7.7-amazoncorretto-17
 
 # Do not copy the war if using the correct openmrs-core image version
 COPY --from=dev /openmrs/distribution/openmrs_core/openmrs.war /openmrs/distribution/openmrs_core/
