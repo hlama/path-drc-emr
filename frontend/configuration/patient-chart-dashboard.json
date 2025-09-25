@@ -10,6 +10,9 @@
                         "title": "hIVCareAndTreatment",
                         "slotName": "hiv-care-and-treatment-group-slot",
                         "isExpanded": true,
+                        "Display conditions": {
+                            "privilege": "View HIV Information"
+                        },
                         "Translation overrides": {
                             "en": {
                                 "hIVCareAndTreatment": "HIV Care And Treatment"
