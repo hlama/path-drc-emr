@@ -35,4 +35,5 @@ COPY --from=dev /openmrs/distribution/openmrs_modules /openmrs/distribution/open
 COPY --from=dev /openmrs/distribution/openmrs_owas /openmrs/distribution/openmrs_owas
 COPY --from=dev /openmrs/distribution/openmrs_config /openmrs/distribution/openmrs_config
 # Copy billing logo into image
-COPY ./frontend/assets/logo.png /openmrs/data/billing/logo.png
+RUN mkdir -p /openmrs/assets
+COPY ./frontend/assets/logo.png /openmrs/assets/logo.png
