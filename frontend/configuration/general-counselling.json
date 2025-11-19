@@ -19,7 +19,7 @@
                                         "id": "screeningDate",
                                         "isDate": true,
                                         "title": "screeningDateTitle",
-                                        "concept": "160753AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                        "concept": "bdbfdfe3-24bb-40ea-b8db-2cfe6aa0d2e3"
                                     },
                                     {
                                         "id": "littleInterest",
@@ -79,12 +79,12 @@
                                     {
                                         "id": "disclosureDate",
                                         "title": "disclosureDateTitle",
-                                        "concept": "160753AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                        "concept": "6a0ee7c3-9ccc-4578-a617-a9097e697845"
                                     },
                                     {
                                         "id": "disclosureStage",
                                         "title": "disclosureStageTitle",
-                                        "concept": "573f93e2-12f6-483e-aa6e-14e9b76b311a"
+                                        "concept": "153b1513-4c90-4a72-9de4-65895eabd901"
                                     },
                                     {
                                         "id": "actions",
