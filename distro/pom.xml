@@ -27,10 +27,10 @@
 
     <!-- track module versions
          we do so here so that we can utilise Maven to track updates, etc. -->
-    <openmrs.version>2.7.5</openmrs.version>
+    <openmrs.version>2.7.5-SNAPSHOT</openmrs.version>
     <initializer.version>2.10.0-SNAPSHOT</initializer.version>
-    <fhir2.version>2.8.0</fhir2.version>
-    <webservices.rest.version>3.1.0-SNAPSHOT</webservices.rest.version>
+    <fhir2.version>2.6.0-SNAPSHOT</fhir2.version>
+    <webservices.rest.version>2.50.0-SNAPSHOT</webservices.rest.version>
     <addresshierarchy.version>2.21.0</addresshierarchy.version>
     <idgen.version>4.14.0</idgen.version>
     <legacyui.version>1.23.0</legacyui.version>
@@ -52,7 +52,7 @@
     <patientflags.version>3.0.8</patientflags.version>
     <o3forms.version>2.3.0</o3forms.version>
     <emrapi.version>2.3.0</emrapi.version>
-    <event.version>3.0.0</event.version>
+    <event.version>2.10.0</event.version>
     <bedmanagement.version>6.2.0-SNAPSHOT</bedmanagement.version>
     <!-- Stock Management and Billing -->
     <stockmanagement.version>2.0.3</stockmanagement.version>
@@ -220,14 +220,14 @@
     </dependency>
     <dependency>
       <groupId>org.openmrs.module</groupId>
-      <artifactId>bedmanagement-omod</artifactId>
-      <version>${bedmanagement.version}</version>
+      <artifactId>stockmanagement-omod</artifactId>
+      <version>${stockmanagement.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.openmrs.module</groupId>
-      <artifactId>stockmanagement-omod</artifactId>
-      <version>${stockmanagement.version}</version>
+      <artifactId>bedmanagement-omod</artifactId>
+      <version>${bedmanagement.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
