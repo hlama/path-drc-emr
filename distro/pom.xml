@@ -255,6 +255,20 @@
       <scope>provided</scope>
       <type>zip</type>
     </dependency>
+    <dependency>
+      <groupId>org.openmrs.content</groupId>
+      <artifactId>path.drc-libiski</artifactId>
+      <version>${path-drc-content.version}</version>
+      <scope>provided</scope>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>org.openmrs.content</groupId>
+      <artifactId>path.drc-akram</artifactId>
+      <version>${path-drc-content.version}</version>
+      <scope>provided</scope>
+      <type>zip</type>
+    </dependency>
   </dependencies>
 
   <build>
