@@ -125,6 +125,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./gateway
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.GATEWAY_IMAGE }}:latest-cache
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.GATEWAY_IMAGE }}:latest-cache
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -136,6 +140,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.FRONTEND_IMAGE }}:latest-cache
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.FRONTEND_IMAGE }}:latest-cache
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -149,6 +157,10 @@ jobs:
           BUILDKIT_PROGRESS: plain
         with:
           context: .
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:latest-cache
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:latest-cache
           platforms: linux/amd64,linux/arm64
           push: true
           secret-files: |
@@ -274,6 +286,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.FRONTEND_IMAGE }}:latest-${{ matrix.site }}-cache
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.FRONTEND_IMAGE }}:latest-${{ matrix.site }}-cache
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -287,6 +303,10 @@ jobs:
           BUILDKIT_PROGRESS: plain
         with:
           context: .
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:latest-${{ matrix.site }}-cache
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:latest-${{ matrix.site }}-cache
           platforms: linux/amd64,linux/arm64
           push: true
           secret-files: |
