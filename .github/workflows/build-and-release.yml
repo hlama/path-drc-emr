@@ -23,7 +23,7 @@ jobs:
   get-changed-distributions:
     runs-on: ubuntu-latest
     outputs:
-      changed-packages: ${{ steps.filter-paths.outputs.changes }}
+      changed-distributions: ${{ steps.filter-paths.outputs.changes }}
 
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
     env:
       GH_EVENT_NAME: ${{ github.event_name }}
     outputs:
-      changed-packages: ${{ steps.detect-changes.outputs.changed-packages }}
+      changed-distributions: ${{ steps.detect-changes.outputs.changed-distributions }}
     steps:
       - id: detect-changes
         run: |
@@ -220,7 +220,7 @@ jobs:
       matrix:
         platform: [ ubuntu-latest ]
         java-version: [ 17 ]
-        site: ${{ fromJSON(needs.list-changed-packages.outputs.changed-packages) }}
+        site: ${{ fromJSON(needs.list-changed-distributions.outputs.changed-distributions) }}
         exclude:
           - site: common
           - site: base
