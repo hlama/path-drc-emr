@@ -41,10 +41,10 @@ jobs:
               - .dockerignore
             base:
               - *common
-            sites/akram:
+            akram:
               - *common
               - ./sites/akram/**
-            sites/libikisi:
+            libikisi:
               - *common
               - ./sites/libikisi/**
 
@@ -66,7 +66,7 @@ jobs:
               echo "changed-packages=${{ toJSON('[base, akram, libikisi]') }}" >> $GITHUB_OUTPUT
               ;;
             *)
-              echo "changed-packages=${{ toJSON(needs.get-changed-packages.outputs.changed-packages) }}" >> $GITHUB_OUTPUT
+              echo "changed-packages=${{ toJSON(needs.get-changed-distributions.outputs.changed-distributions) }}" >> $GITHUB_OUTPUT
               ;;
           esac
 
