@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ghcr.io/path-drc/path-drc-emr-gateway:${TAG:-latest}
+    image: ghcr.io/path-drc/path-drc-emr-gateway:latest
     restart: "unless-stopped"
     depends_on:
       - frontend
