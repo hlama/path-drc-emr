@@ -11,13 +11,13 @@ Copy the `.env.example` file to `.env` or create a new file with the same name a
 ### Package the distribution and prepare the run
 
 ```
-docker compose build
+TAG=latest-libikisi docker compose build --build-arg BUILD_TYPE=site --build-arg MVN_PROJECT=libikisi
 ```
 
 ### Run the app
 
 ```
-docker compose up
+TAG=latest-libikisi docker compose up
 ```
 
 The new OpenMRS UI is accessible at http://localhost/openmrs/spa
@@ -55,7 +55,6 @@ To load the images on the instance, extract the `path-drc-emr-images-bundle.tgz`
 ```sh
 ./load-images.sh
 ```
-
 
 ## Backup and Restore
 

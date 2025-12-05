@@ -20,8 +20,63 @@ env:
   BACKEND_IMAGE: backend
 
 jobs:
-  build-and-release:
+  get-changed-distributions:
     runs-on: ubuntu-latest
+    outputs:
+      changed-packages: ${{ steps.filter-paths.outputs.changes }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter-paths
+        with:
+          filters: |
+            common: &common
+              - ./.github/workflows/build-and-release.yml
+              - ./distro/**
+              - ./frontend/**
+              - ./gateway/**
+              - pom.xml
+              - Dockerfile
+              - .dockerignore
+            base:
+              - *common
+            sites/akram:
+              - *common
+              - ./sites/akram/**
+            sites/libikisi:
+              - *common
+              - ./sites/libikisi/**
+
+  list-changed-distributions:
+    needs: get-changed-distributions
+    runs-on: ubuntu-latest
+    env:
+      GH_EVENT_NAME: ${{ github.event_name }}
+    outputs:
+      changed-packages: ${{ steps.detect-changes.outputs.changed-packages }}
+    steps:
+      - id: detect-changes
+        run: |
+          case $GH_EVENT_NAME in
+            workflow_dispatch)
+              echo "changed-packages=${{ toJSON('[base, akram, libikisi]') }}" >> $GITHUB_OUTPUT
+              ;;
+            workflow_call)
+              echo "changed-packages=${{ toJSON('[base, akram, libikisi]') }}" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "changed-packages=${{ toJSON(needs.get-changed-packages.outputs.changed-packages) }}" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+  build-and-release-base:
+    strategy:
+      matrix:
+        platform: [ ubuntu-latest ]
+        java-version: [ 17 ]
+
+    runs-on: ${{ matrix.platform }}
 
     steps:
       - name: Checkout code
@@ -51,11 +106,11 @@ jobs:
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Set up JDK 17 and configure Maven for GitHub Packages
+      - name: Set up JDK and configure Maven for GitHub Packages
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: ${{ matrix.java-version }}
 
       - uses: s4u/maven-settings-action@v3.1.0
         with:
@@ -78,7 +133,7 @@ jobs:
             ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.GATEWAY_IMAGE }}:${{ env.RELEASE_VERSION }}
 
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./frontend
           platforms: linux/amd64,linux/arm64
@@ -98,6 +153,8 @@ jobs:
           push: true
           secret-files: |
             m2settings=/home/runner/.m2/settings.xml
+          build-args: |
+            MVN_ARGS=deploy
           tags: |
             ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:${{ steps.vars.outputs.SHORT_SHA }}
             ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:latest
@@ -156,3 +213,143 @@ jobs:
             files: |
              path-drc-emr-images-bundle.tgz
              path-drc-docker-compose.tgz
+
+  build-and-release-sites:
+    needs: [ get-changed-distributions, list-changed-distributions, build-and-release-base ]
+    strategy:
+      matrix:
+        platform: [ ubuntu-latest ]
+        java-version: [ 17 ]
+        site: ${{ fromJSON(needs.list-changed-packages.outputs.changed-packages) }}
+        exclude:
+          - site: common
+          - site: base
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract short SHA
+        id: vars
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract RELEASE_VERSION from pom.xml
+        id: extract_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up JDK and configure Maven for GitHub Packages
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+
+      - uses: s4u/maven-settings-action@v3.1.0
+        with:
+          servers: |
+              [{
+                  "id": "path-drc",
+                  "username": "${{ github.actor }}",
+                  "password": "${{ secrets.GITHUB_TOKEN }}"
+              }]
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.FRONTEND_IMAGE }}:${{ steps.vars.outputs.SHORT_SHA }}-${{ matrix.site }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.FRONTEND_IMAGE }}:latest-${{ matrix.site }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.FRONTEND_IMAGE }}:${{ env.RELEASE_VERSION }}-${{ matrix.site }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        env:
+          BUILDKIT_PROGRESS: plain
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          secret-files: |
+            m2settings=/home/runner/.m2/settings.xml
+          build-args: |
+            BUILD_TYPE=site
+            MVN_PROJECT=${{ matrix.site }}
+            MVN_ARGS=deploy
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:${{ steps.vars.outputs.SHORT_SHA }}-${{ matrix.site }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:latest-${{ matrix.site }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-${{ env.BACKEND_IMAGE }}:${{ env.RELEASE_VERSION }}-${{ matrix.site }}
+
+      - name: Pull images
+        run: |
+          docker pull ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-gateway:${{ env.RELEASE_VERSION }}
+          docker pull ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-frontend:${{ env.RELEASE_VERSION }}-${{ matrix.site }}
+          docker pull ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-backend:${{ env.RELEASE_VERSION }}-${{ matrix.site }}
+          docker pull mekomsolutions/restic-compose-backup:latest
+          docker pull mekomsolutions/restic-compose-backup-restore
+
+      - name: Generate docker-compose-skeleton.yaml with release version
+        run: |
+          sed "s|__RELEASE_VERSION__|${{ env.RELEASE_VERSION }}-${{ matrix.site }}|g" docker-compose-skeleton.yaml.template > docker-compose-normalized.yaml
+
+      - name: Build senzing/docker-compose-air-gapper image
+        run: |
+          docker build -t senzing/docker-compose-air-gapper https://github.com/senzing-garage/docker-compose-air-gapper.git#1.0.7
+
+      - name: Generate save-images.sh with air-gapper
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/data \
+            -e SENZING_DOCKER_COMPOSE_FILE=/data/docker-compose-normalized.yaml \
+            -e SENZING_OUTPUT_FILE=/data/save-images.sh \
+            -e SENZING_SUBCOMMAND=create-save-images \
+            senzing/docker-compose-air-gapper:latest
+
+      - name: Make save-images.sh executable
+        run: chmod +x save-images.sh
+
+      - name: Save images as tars
+        run: ./save-images.sh
+
+      - name: Package images and scripts for airgap
+        run: |
+          mv /home/runner/docker-compose-air-gapper-*.tgz path-drc-emr-images-bundle-${{ matrix.site }}.tgz
+
+      - name: Package docker-compose files
+        run: |
+          tar czf path-drc-docker-compose-${{ matrix.site }}.tgz docker-compose.yml docker-compose-restore.yml .env*
+          ls -la path-drc-docker-compose-${{ matrix.site }}.tgz
+
+      - name: Upload airgap bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: path-drc-emr-images-bundle-${{ matrix.site }}
+          path: path-drc-emr-images-bundle-${{ matrix.site }}.tgz
+
+      - name: Create release for tags
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+            files: |
+             path-drc-emr-images-bundle-${{ matrix.site }}.tgz
+             path-drc-docker-compose-${{ matrix.site }}.tgz
