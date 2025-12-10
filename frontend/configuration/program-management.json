@@ -369,7 +369,12 @@
                                 "actionsTitle": "Actions",
                                 "viewDetails": "View Details",
                                 "editForm": "Edit Form",
-                                "add": "Add"
+                                "add": "Add",
+                                "Start ART": "Start ART",
+                                "Substitute ART Regimen": "Substitute ART Regimen",
+                                "Switch ART Regimen Line": "Switch ART Regimen Line",
+                                "Stop ART": "Stop ART",
+                                "Restart ART therapy": "Restart ART therapy"
                             },
                             "fr": {
                                 "hIVEnrolment": "Inscription au VIH",
@@ -401,7 +406,12 @@
                                 "actionsTitle": "Actions",
                                 "viewDetails": "Voir les détails",
                                 "editForm": "Modifier le formulaire",
-                                "add": "Ajouter"
+                                "add": "Ajouter",
+                                "Start ART": "Démarrer la thérapie antirétrovirale",
+                                "Substitute ART Regimen": "Remplacer le régime antirétroviral",
+                                "Switch ART Regimen Line": "Changer de ligne de régime",
+                                "Stop ART": "Arrêter la thérapie antirétrovirale",
+                                "Restart ART therapy": "Reprendre la thérapie antirétrovirale"
                             }
                         }
                     }
