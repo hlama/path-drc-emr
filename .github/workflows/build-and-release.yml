@@ -60,13 +60,13 @@ jobs:
         run: |
           case $GH_EVENT_NAME in
             workflow_dispatch)
-              echo "changed-distributions=${{ toJSON('[base, akram, libikisi]') }}" >> $GITHUB_OUTPUT
+              echo 'changed-distributions=["base", "akram", "libikisi"]' >> $GITHUB_OUTPUT
               ;;
             workflow_call)
-              echo "changed-distributions=${{ toJSON('[base, akram, libikisi]') }}" >> $GITHUB_OUTPUT
+              echo 'changed-distributions=["base", "akram", "libikisi"]' >> $GITHUB_OUTPUT
               ;;
             *)
-              echo "changed-distributions=${{ toJSON(needs.get-changed-distributions.outputs.changed-distributions) }}" >> $GITHUB_OUTPUT
+              echo "changed-distributions=${{ needs.get-changed-distributions.outputs.changed-distributions }}" >> $GITHUB_OUTPUT
               ;;
           esac
 
