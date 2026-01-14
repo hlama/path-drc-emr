@@ -4,7 +4,7 @@ baseurl: "/path-drc-emr"
 url: "https://path-drc.github.io"
 
 # Theme configuration
-remote_theme: just-the-docs/just-the-docs
+theme: just-the-docs
 color_scheme: light
 
 # Search configuration

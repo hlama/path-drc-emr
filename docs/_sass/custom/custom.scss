@@ -1,0 +1,28 @@
+// Fix the sidebar to a fixed width instead of growing with viewport
+// and keep main content left-aligned with header
+@media (min-width: 50rem) {
+  .side-bar {
+    width: $nav-width;
+  }
+
+  .side-bar + .main {
+    margin-left: $nav-width;
+  }
+
+  // Remove max-width from .main so header can expand
+  .main {
+    max-width: none;
+  }
+}
+
+// Override the centering behavior on larger screens
+@media (min-width: 66.5rem) {
+  .side-bar + .main {
+    margin-left: $nav-width;
+  }
+}
+
+// Keep content at fixed max-width while header expands
+.main-content-wrap {
+  max-width: $content-width;
+}
