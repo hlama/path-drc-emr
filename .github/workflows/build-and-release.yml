@@ -66,7 +66,7 @@ jobs:
               echo 'changed-distributions=["base", "akram", "libikisi"]' >> $GITHUB_OUTPUT
               ;;
             *)
-              echo "changed-distributions=${{ needs.get-changed-distributions.outputs.changed-distributions }}" >> $GITHUB_OUTPUT
+              echo 'changed-distributions=${{ needs.get-changed-distributions.outputs.changed-distributions }}' >> $GITHUB_OUTPUT
               ;;
           esac
 
