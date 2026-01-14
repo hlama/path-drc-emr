@@ -1,0 +1,54 @@
+title: PATH DRC EMR Documentation
+description: Documentation for the PATH DRC EMR distribution based on OpenMRS 3.0
+baseurl: "/path-drc-emr"
+url: "https://path-drc.github.io"
+
+# Theme configuration
+remote_theme: just-the-docs/just-the-docs
+color_scheme: light
+
+# Search configuration
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+
+# Navigation structure
+nav_sort: auto
+
+# Enable heading anchors
+heading_anchors: true
+
+# Footer
+footer_content: 'PATH DRC EMR is built on OpenMRS 3.0. <a href="https://github.com/path-drc/path-drc-emr">View on GitHub</a>'
+
+# Aux links (top right)
+aux_links:
+  "PATH DRC EMR on GitHub":
+    - "https://github.com/path-drc/path-drc-emr"
+  "Content Package":
+    - "https://github.com/path-drc/openmrs-content-path-drc"
+
+aux_links_new_tab: true
+
+# Mermaid support for diagrams
+mermaid:
+  version: "10.6.1"
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-github-metadata
+  - jekyll-include-cache
+
+# Exclude from processing
+exclude:
+  - node_modules/
+  - vendor/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
