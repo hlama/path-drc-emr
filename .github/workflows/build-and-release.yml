@@ -55,22 +55,26 @@ jobs:
       GH_EVENT_NAME: ${{ github.event_name }}
     outputs:
       changed-distributions: ${{ steps.detect-changes.outputs.changed-distributions }}
+      has-buildable-changes: ${{ steps.detect-changes.outputs.has-buildable-changes }}
     steps:
       - id: detect-changes
         run: |
           case $GH_EVENT_NAME in
-            workflow_dispatch)
+            workflow_dispatch|workflow_call)
               echo 'changed-distributions=["base", "akram", "libikisi"]' >> $GITHUB_OUTPUT
-              ;;
-            workflow_call)
-              echo 'changed-distributions=["base", "akram", "libikisi"]' >> $GITHUB_OUTPUT
+              echo 'has-buildable-changes=true' >> $GITHUB_OUTPUT
               ;;
             *)
-              echo 'changed-distributions=${{ needs.get-changed-distributions.outputs.changed-distributions }}' >> $GITHUB_OUTPUT
+              CHANGES='${{ needs.get-changed-distributions.outputs.changed-distributions }}'
+              echo "changed-distributions=$CHANGES" >> $GITHUB_OUTPUT
+              HAS_BUILDABLE=$(echo "$CHANGES" | jq 'map(select(. != "common")) | length > 0')
+              echo "has-buildable-changes=$HAS_BUILDABLE" >> $GITHUB_OUTPUT
               ;;
           esac
 
   build-and-release-base:
+    needs: [list-changed-distributions]
+    if: needs.list-changed-distributions.outputs.has-buildable-changes == 'true'
     strategy:
       matrix:
         platform: [ ubuntu-latest ]
@@ -228,6 +232,7 @@ jobs:
 
   build-and-release-sites:
     needs: [ get-changed-distributions, list-changed-distributions, build-and-release-base ]
+    if: needs.list-changed-distributions.outputs.has-buildable-changes == 'true'
     strategy:
       matrix:
         platform: [ ubuntu-latest ]
