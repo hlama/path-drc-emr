@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.openmrs</groupId>
+  <groupId>org.path.drc.omrs</groupId>
   <artifactId>distro-emr</artifactId>
   <name>Package and Run OpenMRS</name>
   <description>Convenient project to build an OpenMRS distribution and run it</description>
@@ -8,25 +8,11 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <organization>
-    <name>OpenMRS Inc.</name>
-    <url>https://openmrs.org</url>
-  </organization>
-
   <scm>
-    <connection>scm:git:git@github.com:openmrs/openmrs-distro-referenceapplication.git</connection>
-    <developerConnection>scm:git:git@github.com:openmrs/openmrs-distro-referenceapplication.git</developerConnection>
+    <connection>scm:git:git@github.com:path-drc/path-drc-emr.git</connection>
+    <developerConnection>scm:git:git@github.com:path-drc/path-drc-emr.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
-
-  <developers>
-    <developer>
-      <name>Romain Buisson</name>
-    </developer>
-    <developer>
-      <name>Ian Bacher</name>
-    </developer>
-  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -231,6 +217,18 @@
       <id>frontend</id>
       <modules>
         <module>frontend</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>akram</id>
+      <modules>
+        <module>sites/akram</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>libikisi</id>
+      <modules>
+        <module>sites/libikisi</module>
       </modules>
     </profile>
   </profiles>

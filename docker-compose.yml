@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ghcr.io/path-drc/path-drc-emr-gateway:${TAG:-latest}
+    image: ghcr.io/path-drc/path-drc-emr-gateway:latest
     restart: "unless-stopped"
     depends_on:
       - frontend
@@ -35,7 +35,6 @@ services:
       OMRS_CONFIG_CONNECTION_DATABASE: openmrs
       OMRS_CONFIG_CONNECTION_USERNAME: ${OMRS_DB_USER:-openmrs}
       OMRS_CONFIG_CONNECTION_PASSWORD: ${OMRS_DB_PASSWORD:-openmrs}
-      OMRS_EXTRA_DRC_INSTANCE: ${OMRS_EXTRA_DRC_INSTANCE}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/openmrs"]
       timeout: 5s
@@ -83,8 +82,8 @@ services:
       RESTIC_KEEP_WEEKLY: ${RESTIC_KEEP_WEEKLY}
       RESTIC_KEEP_MONTHLY: ${RESTIC_KEEP_MONTHLY}
       RESTIC_KEEP_YEARLY: ${RESTIC_KEEP_YEARLY}
-      LOG_LEVEL: ${LOG_LEVEL}
-      CRON_SCHEDULE: ${CRON_SCHEDULE}
+      LOG_LEVEL: ${RESTIC_LOG_LEVEL}
+      CRON_SCHEDULE: ${RESTIC_CRON_SCHEDULE}
 
 volumes:
   openmrs-data:

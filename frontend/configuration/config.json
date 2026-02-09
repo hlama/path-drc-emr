@@ -89,5 +89,18 @@
   },
   "@openmrs/esm-dispensing-app": {
     "completeOrderWithThisDispense": true
+  },
+  "@openmrs/esm-appointments-app": {
+    "appointmentTypes": [
+      "Prévue"
+    ],
+    "appointmentStatuses": [
+      "Demandé",
+      "Prévue",
+      "Archivé",
+      "Terminé",
+      "Annulé",
+      "Raté"
+    ]
   }
 }
