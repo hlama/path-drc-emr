@@ -314,6 +314,12 @@ jobs:
           docker pull mekomsolutions/restic-compose-backup:latest
           docker pull mekomsolutions/restic-compose-backup-restore
 
+      - name: Tag gateway with site suffix
+        run: |
+          docker buildx imagetools create \
+            -t ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-gateway:${{ env.RELEASE_VERSION }}-${{ matrix.site }} \
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-gateway:${{ env.RELEASE_VERSION }}
+
       - name: Generate docker-compose-skeleton.yaml with release version
         run: |
           sed "s|__RELEASE_VERSION__|${{ env.RELEASE_VERSION }}-${{ matrix.site }}|g" docker-compose-skeleton.yaml.template > docker-compose-normalized.yaml
