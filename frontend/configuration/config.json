@@ -91,16 +91,26 @@
     "completeOrderWithThisDispense": true
   },
   "@openmrs/esm-appointments-app": {
-    "appointmentTypes": [
-      "Prévue"
-    ],
-    "appointmentStatuses": [
-      "Demandé",
-      "Prévue",
-      "Archivé",
-      "Terminé",
-      "Annulé",
-      "Raté"
-    ]
-  }
+      "appointmentTypes": [
+        "Scheduled"
+      ],
+      "appointmentStatuses": [
+        "Requested",
+        "Scheduled",
+        "CheckedIn",
+        "Completed",
+        "Cancelled",
+        "Missed"
+      ],
+      "Translation overrides": {
+        "fr": {
+          "Requested": "Demandé",
+          "Scheduled": "Prévue",
+          "CheckedIn": "Archivé",
+          "Completed": "Terminé",
+          "Cancelled": "Annulé",
+          "Missed": "Raté"
+        }
+      }
+    }
 }
