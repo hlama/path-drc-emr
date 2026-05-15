@@ -14,21 +14,8 @@ map $http_x_real_ip $forwarded_ip {
   default $remote_addr;
 }
 
-map $forwarded_proto $var_proxy_cookie_flags {
-  https   "JSESSIONID secure samesite=strict";
-  default "off";
-}
-
-upstream frontend {
-  # always assume the frontend will be available
-  server frontend max_fails=0;
-}
-
-upstream backend {
-  server backend:8080 max_fails=0;
-}
-
 server {
+  listen  [::]:80;
   listen       80;
 
   add_header X-XSS-Protection "1; mode=block";
@@ -39,8 +26,6 @@ server {
   proxy_set_header      X-Forwarded-Proto $forwarded_proto;
   proxy_set_header      X-Real-IP $forwarded_ip;
   proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-  # if serving this via HTTPS, the following is recommended
-  # proxy_cookie_flags      $var_proxy_cookie_flags;
   proxy_http_version    1.1;
 
   gzip on;
@@ -76,21 +61,30 @@ server {
   # all redirects are relative to the gateway
   absolute_redirect off;
 
-  location = /openmrs/spa {
-    return 301 /openmrs/spa/;
-  }
+  resolver 127.0.0.11 valid=30s ipv6=off;
 
   location /openmrs/spa/ {
-    proxy_pass http://frontend/;
-    proxy_redirect http://$host/ /openmrs/spa/;
+    set $frontend http://frontend;
+    rewrite ^/openmrs/spa/(.*) /$1 break;
+    proxy_pass $frontend;
   }
 
   location /openmrs {
     add_header Cache-Control "no-cache, must-revalidate";
-    proxy_pass http://backend;
+    set $backend http://backend:8080;
+    proxy_read_timeout 300s;
+    proxy_pass $backend;
+  }
+
+  location = /openmrs/spa/ {
+    return 301 /openmrs/spa/home;
+  }
+
+  location = /openmrs/spa {
+    return 301 /openmrs/spa/home;
   }
 
   location = / {
-    return 301 /openmrs/spa/;
+    return 301 /openmrs/spa/home;
   }
 }

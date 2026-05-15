@@ -150,33 +150,24 @@ steps:
 
 ### Process
 
-1. Pull all required images
-2. Use docker-compose-air-gapper to create bundle
+1. Render `docker-compose-skeleton.yaml.template` with the release version
+2. Run `scripts/create-airgap-bundle.sh` to pull every referenced image,
+   `docker save` each to a tar, and tar everything (plus a `load-images.sh`
+   companion) into a single bundle
 3. Upload as artifact
 4. Attach to release (for tags)
 
 ```yaml
-- name: Build senzing/docker-compose-air-gapper
+- name: Build airgap bundle
   run: |
-    docker build -t senzing/docker-compose-air-gapper \
-      https://github.com/senzing-garage/docker-compose-air-gapper.git#1.0.7
-
-- name: Generate save-images.sh
-  run: |
-    docker run --rm \
-      -v ${{ github.workspace }}:/data \
-      -e SENZING_DOCKER_COMPOSE_FILE=/data/docker-compose-normalized.yaml \
-      -e SENZING_OUTPUT_FILE=/data/save-images.sh \
-      senzing/docker-compose-air-gapper:latest
-
-- name: Save images as tars
-  run: ./save-images.sh
-
-- name: Package bundle
-  run: |
-    mv /home/runner/docker-compose-air-gapper-*.tgz \
+    ./scripts/create-airgap-bundle.sh \
+      docker-compose-normalized.yaml \
       path-drc-emr-images-bundle.tgz
 ```
+
+The bundle's `load-images.sh` runs `docker load` for each tar, so a deployer
+on the target host can extract the tgz and execute one script to populate the
+local image cache.
 
 ---
 

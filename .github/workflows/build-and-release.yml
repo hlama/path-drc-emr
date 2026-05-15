@@ -188,28 +188,9 @@ jobs:
         run: |
           sed "s|__RELEASE_VERSION__|${{ env.RELEASE_VERSION }}|g" docker-compose-skeleton.yaml.template > docker-compose-normalized.yaml
 
-      - name: Build senzing/docker-compose-air-gapper image
+      - name: Build airgap bundle
         run: |
-          docker build -t senzing/docker-compose-air-gapper https://github.com/senzing-garage/docker-compose-air-gapper.git#1.0.7
-
-      - name: Generate save-images.sh with air-gapper
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/data \
-            -e SENZING_DOCKER_COMPOSE_FILE=/data/docker-compose-normalized.yaml \
-            -e SENZING_OUTPUT_FILE=/data/save-images.sh \
-            -e SENZING_SUBCOMMAND=create-save-images \
-            senzing/docker-compose-air-gapper:latest
-
-      - name: Make save-images.sh executable
-        run: chmod +x save-images.sh
-
-      - name: Save images as tars
-        run: ./save-images.sh
-
-      - name: Package images and scripts for airgap
-        run: |
-          mv /home/runner/docker-compose-air-gapper-*.tgz path-drc-emr-images-bundle.tgz
+          ./scripts/create-airgap-bundle.sh docker-compose-normalized.yaml path-drc-emr-images-bundle.tgz
 
       - name: Package docker-compose files
         run: |
@@ -333,32 +314,19 @@ jobs:
           docker pull mekomsolutions/restic-compose-backup:latest
           docker pull mekomsolutions/restic-compose-backup-restore
 
+      - name: Tag gateway with site suffix
+        run: |
+          docker buildx imagetools create \
+            -t ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-gateway:${{ env.RELEASE_VERSION }}-${{ matrix.site }} \
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.REPO_NAME }}-gateway:${{ env.RELEASE_VERSION }}
+
       - name: Generate docker-compose-skeleton.yaml with release version
         run: |
           sed "s|__RELEASE_VERSION__|${{ env.RELEASE_VERSION }}-${{ matrix.site }}|g" docker-compose-skeleton.yaml.template > docker-compose-normalized.yaml
 
-      - name: Build senzing/docker-compose-air-gapper image
+      - name: Build airgap bundle
         run: |
-          docker build -t senzing/docker-compose-air-gapper https://github.com/senzing-garage/docker-compose-air-gapper.git#1.0.7
-
-      - name: Generate save-images.sh with air-gapper
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/data \
-            -e SENZING_DOCKER_COMPOSE_FILE=/data/docker-compose-normalized.yaml \
-            -e SENZING_OUTPUT_FILE=/data/save-images.sh \
-            -e SENZING_SUBCOMMAND=create-save-images \
-            senzing/docker-compose-air-gapper:latest
-
-      - name: Make save-images.sh executable
-        run: chmod +x save-images.sh
-
-      - name: Save images as tars
-        run: ./save-images.sh
-
-      - name: Package images and scripts for airgap
-        run: |
-          mv /home/runner/docker-compose-air-gapper-*.tgz path-drc-emr-images-bundle-${{ matrix.site }}.tgz
+          ./scripts/create-airgap-bundle.sh docker-compose-normalized.yaml path-drc-emr-images-bundle-${{ matrix.site }}.tgz
 
       - name: Package docker-compose files
         run: |
